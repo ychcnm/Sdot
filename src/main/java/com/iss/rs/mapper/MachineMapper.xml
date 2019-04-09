@@ -6,7 +6,7 @@
 
     <resultMap type="com.iss.rs.entity.Machine" id="allMachine">
         <!-- map table "person"column to class "Person" property -->
-        <id column="machineId" property="machineId"  />
+        <id column="machineId" property="machineId"/>
         <result property="yarnType" column="yarnType"/>
         <result property="capacity" column="capacity"/>
         <result property="cost" column="cost"/>
