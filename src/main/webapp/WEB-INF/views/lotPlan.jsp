@@ -284,21 +284,23 @@
                             <thead>
                             <tr>
                                 <th>Lot No.</th>
+                                <th>Production Series</th>
                                 <th>Production Type</th>
                                 <th>Production Quantity</th>
                                 <th width="120">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-
                             <tr>
+                                <th scope="row">Lot 1</th>
                                 <td>
-                                    1
+                                    <select id="prdSeries" class="form-control">
+                                        <option selected="">Choose Production Series</option>
+                                    </select>
                                 </td>
                                 <td>
-                                    <select id="dd" class="form-control">
-                                        <option selected="">Choose...</option>
-                                        <option>...</option>
+                                    <select id="prdType" class="form-control">
+                                        <option selected="">Choose Production Type</option>
                                     </select>
                                 </td>
                                 <td>
@@ -314,8 +316,69 @@
                             </tbody>
                         </table>
                         <div class="form-group m-b-0">
-                            <a role="button" href="#" class="btn btn-success"><i class="fa fa-plus bigfonts"></i></a>
-                            <small id="emailHelp" class="form-text text-muted">Add Lot</small>
+                            <a role="button" href="#custom-modal" class="btn btn-success" data-target="#customModal"
+                               data-toggle="modal"><i class="fa fa-plus bigfonts"></i></a>
+                            <small class="form-text text-muted">Add Lot</small>
+
+                            <!-- Modal -->
+                            <div class="modal fade custom-modal" id="customModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="customModal" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel2">Add the Lot</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card-body">
+
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="LotNumber">Lot Number</label>
+                                                        <input type="text" class="form-control" id="LotNumber"
+                                                               aria-describedby="LotNumberHelp" placeholder="NSHSSN231"
+                                                               readonly>
+                                                        <small id="LotNumberHelp" class="form-text text-muted">Lot
+                                                            Number was generated randomly by system
+                                                        </small>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">Your lucky number
+                                                            (required)</label>
+                                                        <input type="number" class="form-control"
+                                                               id="exampleInputNumber1" aria-describedby="numberlHelp"
+                                                               placeholder="Enter number" required="">
+                                                        <small id="numberlHelp" class="form-text text-muted">We'll never
+                                                            share your email with anyone else.
+                                                        </small>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Password (required)</label>
+                                                        <input type="password" class="form-control"
+                                                               id="exampleInputPassword1" placeholder="Password"
+                                                               required="">
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                            <input type="checkbox" class="form-check-input">
+                                                            Check me out
+                                                        </label>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <div id="reportrange" class="form-control"
@@ -347,43 +410,17 @@
 
 </div>
 <!-- END content-page -->
+<jsp:include page="/WEB-INF/views/partial/footer.jsp" flush="true"/>
 
-<footer class="footer">
-		<span class="text-right">
-		Copyright <a target="_blank" href="#">Your Website</a>
-		</span>
-    <span class="float-right">
-		Powered by <a target="_blank" href="https://www.pikeadmin.com"><b>Pike Admin</b></a>
-		</span>
-</footer>
 
-</div>
-<!-- END main -->
-
-<script src='<spring:url value="/statics/assets/js/modernizr.min.js"/>'></script>
-<script src='<spring:url value="/statics/assets/js/jquery.min.js"/>'></script>
-<script src='<spring:url value="/statics/assets/js/moment.min.js"/>'></script>
-
-<script src='<spring:url value="/statics/assets/js/popper.min.js"/>'></script>
-<script src='<spring:url value="/statics/assets/js/bootstrap.min.js"/>'></script>
-
-<script src='<spring:url value="/statics/assets/js/detect.js"/>'></script>
-<script src='<spring:url value="/statics/assets/js/fastclick.js"/>'></script>
-<script src='<spring:url value="/statics/assets/js/jquery.blockUI.js"/>'></script>
-<script src='<spring:url value="/statics/assets/js/jquery.nicescroll.js"/>'></script>
-
-<!-- App js -->
-<script src='<spring:url value="/statics/assets/js/pikeadmin.js"/>'></script>
-
+<!-- Page JS-->
+<script src='<spring:url value="/statics/js/page/lotPlan.js"/>'></script>
 <!-- BEGIN Java Script for this page -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-
-<!-- Counter-Up-->
-<script src='<spring:url value="/statics/assets/plugins/waypoints/lib/jquery.waypoints.min.js"/>'></script>
-<script src='<spring:url value="/statics/assets/plugins/counterup/jquery.counterup.min.js"/>'></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/esm/popper.js"></script>
+<!-- END Java Script for this page -->
+<script>
+    lotPlanPage.init()
+</script>
 <!-- END Java Script for this page -->
 
 </body>
