@@ -30,6 +30,7 @@
 
     <!-- BEGIN CSS for this page -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+    <link href='<spring:url value="/statics/assets/plugins/datetimepicker/css/daterangepicker.css"/>' rel="stylesheet">
     <!-- END CSS for this page -->
 
 </head>
@@ -275,6 +276,9 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card mb-3">
                     <div class="card-header">
+                        <span class="pull-right"><button class="btn btn-primary btn-sm" data-target="#addLotModal"
+                                                         data-toggle="modal"><i class="fa fa-user-plus"
+                                                                                aria-hidden="true"></i> Add Lot</button></span>
                         <h3><i class="fa fa-file-text-o"></i> Create Lot</h3>
                     </div>
 
@@ -282,9 +286,9 @@
                         <div class="dataTables_scroll">
                             <div class="dataTables_scrollBody"
                                  style="position: relative; overflow: auto; height: 350px; width: 100%;">
-                                <table id="example3"
+                                <table id="lotTable"
                                        class="table table-bordered table-hover display dataTable no-footer" role="grid"
-                                       aria-describedby="example3_info" style="width: 100%;">
+                                       aria-describedby="lotTable" style="width: 100%;">
                                     <thead>
                                     <tr>
                                         <th>Lot No.</th>
@@ -295,36 +299,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <th scope="row"><span>Lot 1</span></th>
-                                        <td>
-                                            Series A
-                                        </td>
-                                        <td>
-                                            JSBSJ01
-                                        </td>
-                                        <td>
-                                            2131232123
-                                        </td>
-                                        <td>
-                                            <a href="javascript:deleteRecord_13('13');" class="btn btn-danger btn-sm"
-                                               data-placement="top" data-toggle="tooltip" data-title="Delete"><i
-                                                    class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                        </td>
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="form-group m-b-0">
-                            <a id="addLot" role="button" href="#custom-modal" class="btn btn-success"
-                               data-target="#customModal"
-                               data-toggle="modal"><i class="fa fa-plus bigfonts"></i></a>
-                            <small class="form-text text-muted">Add Lot</small>
-
                             <!-- Modal -->
-                            <div class="modal fade custom-modal" id="customModal" tabindex="-1" role="dialog"
-                                 aria-labelledby="customModal" aria-hidden="true">
+                            <div class="modal fade custom-modal" id="addLotModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="addLotModal" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -339,7 +321,7 @@
                                                     <div class="form-group">
                                                         <label for="LotNumber">Lot Number</label>
                                                         <input type="text" class="form-control" id="LotNumber"
-                                                               aria-describedby="LotNumberHelp" placeholder="NSHSSN231"
+                                                               aria-describedby="LotNumberHelp"
                                                                readonly>
                                                         <small id="LotNumberHelp" class="form-text text-muted">Lot
                                                             Number was Generated Randomly by System
@@ -347,9 +329,11 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="prdSeries">Product Series</label>
-                                                        <select id="prdSeries" class="form-control"
-                                                                aria-describedby="prdSeriesHelp">
-                                                            <option selected="">Choose Production Series</option>
+                                                        <select id="prdSeries" class="form-control is-valid"
+                                                                aria-describedby="prdSeriesHelp" required>
+                                                            <option selected="selected" value="0">Choose Production
+                                                                Series
+                                                            </option>
                                                         </select>
                                                         <small id="prdSeriesHelp" class="form-text text-muted">Please
                                                             Select the Product Series Number
@@ -357,9 +341,11 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="prdType">Product Type</label>
-                                                        <select id="prdType" class="form-control"
-                                                                aria-describedby="prdTypeHelp">
-                                                            <option selected="">Choose Production Type</option>
+                                                        <select id="prdType" class="form-control is-valid"
+                                                                aria-describedby="prdTypeHelp" required>
+                                                            <option selected="selected" value="0">Choose Production
+                                                                Type
+                                                            </option>
                                                         </select>
                                                         <small id="prdTypeHelp" class="form-text text-muted">Please
                                                             Select the Product Type
@@ -367,7 +353,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="prdQty">Product Quantity</label>
-                                                        <input type="number" class="form-control" id="prdQty"
+                                                        <input type="number" class="form-control  is-valid" id="prdQty"
                                                                aria-describedby="prdQtyHelp" placeholder="Enter number"
                                                                required="true">
                                                         <small id="prdQtyHelp" class="form-text text-muted">Please Input
@@ -380,27 +366,29 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                             </button>
-                                            <button id="saveBtn" type="button" class="btn btn-primary">Save changes
+                                            <button id="saveBtn" type="submit" class="btn btn-primary"
+                                                    data-dismiss="modal">Save changes
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
-                            <div id="reportrange" class="form-control"
-                                 style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                                <i class="fa fa-calendar"></i>&nbsp;
-                                <span>April 1, 2019 - April 30, 2019</span> <b class="caret"></b>
+                        <div class="card-body">
+                            <div class="m-b-0">
+                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                    <button class="btn btn-primary" type="submit">
+                                        Submit
+                                    </button>
+                                    <button type="reset" class="btn btn-secondary m-l-5">
+                                        Cancel
+                                    </button>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                    <input type="text" class="form-control" name="daterange"
+                                           value="01/01/2015 - 01/31/2015">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group m-b-0">
-                            <button class="btn btn-primary" type="submit">
-                                Submit
-                            </button>
-                            <button type="reset" class="btn btn-secondary m-l-5">
-                                Cancel
-                            </button>
                         </div>
                     </div>
                 </div><!-- end card-->
@@ -414,7 +402,6 @@
 
     </div>
     <!-- END content -->
-
 </div>
 <!-- END content-page -->
 <jsp:include page="/WEB-INF/views/partial/footer.jsp" flush="true"/>
@@ -423,10 +410,19 @@
 <!-- Page JS-->
 <script src='<spring:url value="/statics/js/page/lotPlan.js"/>'></script>
 <!-- BEGIN Java Script for this page -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/esm/popper.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
 <!-- END Java Script for this page -->
 <script>
-    lotPlanPage.init()
+    lotPlanPage.init();
+    $(function () {
+        $('input[name="daterange"]').daterangepicker({
+            opens: 'left'
+        }, function (start, end, label) {
+            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        });
+    });
 </script>
 <!-- END Java Script for this page -->
 

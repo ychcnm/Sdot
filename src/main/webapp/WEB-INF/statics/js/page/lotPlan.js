@@ -22,7 +22,17 @@ let lotPlanPage = {
             $('#LotNumber').val(guid());
         });
         $('#saveBtn').on('click', function () {
-
+            let lotNumber = $('#LotNumber').val();
+            let productSeries = $('#prdSeries').val();
+            $('#prdSeries').val("0");
+            let productType = $('#prdType').val();
+            let prodQty = $('#prdQty').val();
+            let row = "<tr><th scope='row'>" + lotNumber + "</th><td>" + productSeries + "</td><td>" + productType + "</td><td>" + prodQty + "</td>";
+            row += "<td><a class=\"btn btn-danger btn-sm\" href=\"javascript:deleteRecord_13('13');\" data-toggle=\"tooltip\" data-title=\"Delete\" data-placement=\"top\" type=\"delBtn\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></a></td></tr>";
+            $('#lotTable > tbody:last-child').append(row);
+        });
+        $('#lotTable').on('click', 'a[type="delBtn"]', function (e) {
+            $(this).closest('tr').remove()
         });
     },
     getProductSuccess: function (data) {

@@ -55,7 +55,6 @@ public class LotController {
         String series = gson.fromJson(data, JsonObject.class).get("series").getAsString();
         System.out.println(series);
         List<String> productType = productService.getProductType(series);
-
         return productType;
     }
 }
