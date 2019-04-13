@@ -1,13 +1,12 @@
 package com.iss.rs.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.iss.rs.entity.Productinfo;
 import com.iss.rs.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class LotController {
     //映射一个action
     @RequestMapping(value = "/getProduct.do", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public Map<String, List<String>> getProductType() throws Exception {
+    public Map<String, List<String>> getProduct() throws Exception {
         //输出日志文件
         logger.info("/getProduct.do");
         List<Productinfo> product = productService.getAllProduct();
@@ -45,5 +44,18 @@ public class LotController {
             }
         });
         return resultMap;
+    }
+
+    @RequestMapping(value = "/getProductType.do", produces = "application/json")
+    @ResponseBody
+    public List<String> getProductType(@RequestBody String data) throws Exception {
+        //输出日志文件
+        logger.info("/getProductType.do");
+        Gson gson = new Gson();
+        String series = gson.fromJson(data, JsonObject.class).get("series").getAsString();
+        System.out.println(series);
+        List<String> productType = productService.getProductType(series);
+
+        return productType;
     }
 }

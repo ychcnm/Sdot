@@ -16,4 +16,10 @@ public class ProductService {
     public List<Productinfo> getAllProduct() {
         return productInfoMapper.getAllProduct();
     }
+
+    public List<String> getProductType(String series) {
+        return productInfoMapper.getProductType(series);
+    }
+
+
 }

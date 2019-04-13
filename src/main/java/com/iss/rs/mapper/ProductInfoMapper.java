@@ -5,5 +5,7 @@ import com.iss.rs.entity.Productinfo;
 import java.util.List;
 
 public interface ProductInfoMapper {
-    public List<Productinfo> getAllProduct();
+    List<Productinfo> getAllProduct();
+
+    List<String> getProductType(String series);
 }

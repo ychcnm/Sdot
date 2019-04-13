@@ -43,6 +43,6 @@
 <script src='<spring:url value="/statics/assets/plugins/waypoints/lib/jquery.waypoints.min.js"/>'></script>
 <script src='<spring:url value="/statics/assets/plugins/counterup/jquery.counterup.min.js"/>'></script>
 
-<script src='<spring:url value="/statics/js/utli/util.js"/>'></script>
-<script src='<spring:url value="/statics/js/utli/request.js"/>'></script>
+<script src='<spring:url value="/statics/js/util/util.js"/>'></script>
+<script src='<spring:url value="/statics/js/util/request.js"/>'></script>
 

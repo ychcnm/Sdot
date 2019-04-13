@@ -3,7 +3,7 @@
  *
  * @returns
  */
-var request = {
+let request = {
     myAjax: function (url, data, success, error) {
         $.ajax({
             type: "POST",

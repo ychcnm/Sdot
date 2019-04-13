@@ -279,44 +279,46 @@
                     </div>
 
                     <div class="card-body">
-
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Lot No.</th>
-                                <th>Production Series</th>
-                                <th>Production Type</th>
-                                <th>Production Quantity</th>
-                                <th width="120">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row">Lot 1</th>
-                                <td>
-                                    <select id="prdSeries" class="form-control">
-                                        <option selected="">Choose Production Series</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select id="prdType" class="form-control">
-                                        <option selected="">Choose Production Type</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" id="exampleInputNumber1"
-                                           aria-describedby="numberlHelp" placeholder="Enter number" required="">
-                                </td>
-                                <td>
-                                    <a href="javascript:deleteRecord_13('13');" class="btn btn-danger btn-sm"
-                                       data-placement="top" data-toggle="tooltip" data-title="Delete"><i
-                                            class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="dataTables_scroll">
+                            <div class="dataTables_scrollBody"
+                                 style="position: relative; overflow: auto; height: 350px; width: 100%;">
+                                <table id="example3"
+                                       class="table table-bordered table-hover display dataTable no-footer" role="grid"
+                                       aria-describedby="example3_info" style="width: 100%;">
+                                    <thead>
+                                    <tr>
+                                        <th>Lot No.</th>
+                                        <th>Production Series</th>
+                                        <th>Production Type</th>
+                                        <th>Production Quantity</th>
+                                        <th width="120">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row"><span>Lot 1</span></th>
+                                        <td>
+                                            Series A
+                                        </td>
+                                        <td>
+                                            JSBSJ01
+                                        </td>
+                                        <td>
+                                            2131232123
+                                        </td>
+                                        <td>
+                                            <a href="javascript:deleteRecord_13('13');" class="btn btn-danger btn-sm"
+                                               data-placement="top" data-toggle="tooltip" data-title="Delete"><i
+                                                    class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div class="form-group m-b-0">
-                            <a role="button" href="#custom-modal" class="btn btn-success" data-target="#customModal"
+                            <a id="addLot" role="button" href="#custom-modal" class="btn btn-success"
+                               data-target="#customModal"
                                data-toggle="modal"><i class="fa fa-plus bigfonts"></i></a>
                             <small class="form-text text-muted">Add Lot</small>
 
@@ -333,7 +335,6 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="card-body">
-
                                                 <form>
                                                     <div class="form-group">
                                                         <label for="LotNumber">Lot Number</label>
@@ -341,40 +342,46 @@
                                                                aria-describedby="LotNumberHelp" placeholder="NSHSSN231"
                                                                readonly>
                                                         <small id="LotNumberHelp" class="form-text text-muted">Lot
-                                                            Number was generated randomly by system
+                                                            Number was Generated Randomly by System
                                                         </small>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="exampleInputEmail1">Your lucky number
-                                                            (required)</label>
-                                                        <input type="number" class="form-control"
-                                                               id="exampleInputNumber1" aria-describedby="numberlHelp"
-                                                               placeholder="Enter number" required="">
-                                                        <small id="numberlHelp" class="form-text text-muted">We'll never
-                                                            share your email with anyone else.
+                                                        <label for="prdSeries">Product Series</label>
+                                                        <select id="prdSeries" class="form-control"
+                                                                aria-describedby="prdSeriesHelp">
+                                                            <option selected="">Choose Production Series</option>
+                                                        </select>
+                                                        <small id="prdSeriesHelp" class="form-text text-muted">Please
+                                                            Select the Product Series Number
                                                         </small>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="exampleInputPassword1">Password (required)</label>
-                                                        <input type="password" class="form-control"
-                                                               id="exampleInputPassword1" placeholder="Password"
-                                                               required="">
+                                                        <label for="prdType">Product Type</label>
+                                                        <select id="prdType" class="form-control"
+                                                                aria-describedby="prdTypeHelp">
+                                                            <option selected="">Choose Production Type</option>
+                                                        </select>
+                                                        <small id="prdTypeHelp" class="form-text text-muted">Please
+                                                            Select the Product Type
+                                                        </small>
                                                     </div>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input type="checkbox" class="form-check-input">
-                                                            Check me out
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <label for="prdQty">Product Quantity</label>
+                                                        <input type="number" class="form-control" id="prdQty"
+                                                               aria-describedby="prdQtyHelp" placeholder="Enter number"
+                                                               required="true">
+                                                        <small id="prdQtyHelp" class="form-text text-muted">Please Input
+                                                            the Product Quantity
+                                                        </small>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
                                                 </form>
-
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                             </button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                            <button id="saveBtn" type="button" class="btn btn-primary">Save changes
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -387,7 +394,7 @@
                                 <span>April 1, 2019 - April 30, 2019</span> <b class="caret"></b>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group m-b-0">
                             <button class="btn btn-primary" type="submit">
                                 Submit
                             </button>
