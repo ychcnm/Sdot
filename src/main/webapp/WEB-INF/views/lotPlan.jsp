@@ -44,8 +44,8 @@
 
         <!-- LOGO -->
         <div class="headerbar-left">
-            <a href="index.html" class="logo"><img alt="Logo"
-                                                   src='<spring:url value="/statics/assets/images/logo.png"/>'/> <span>Hex</span></a>
+            <a href="" class="logo"><img alt="Logo"
+                                         src='<spring:url value="/statics/assets/images/logo.png"/>'/> <span>Hex</span></a>
         </div>
 
         <nav class="navbar-custom">
@@ -214,7 +214,7 @@
                         </div>
 
                         <!-- item-->
-                        <a href="pro-profile.html" class="dropdown-item notify-item">
+                        <a class="dropdown-item notify-item">
                             <i class="fa fa-user"></i> <span>Profile</span>
                         </a>
 
@@ -277,11 +277,11 @@
                 <div class="card mb-3">
                     <div class="card-header">
                         <span class="pull-right"><button class="btn btn-primary btn-sm" data-target="#addLotModal"
+                                                         id="addLot"
                                                          data-toggle="modal"><i class="fa fa-user-plus"
                                                                                 aria-hidden="true"></i> Add Lot</button></span>
                         <h3><i class="fa fa-file-text-o"></i> Create Lot</h3>
                     </div>
-
                     <div class="card-body">
                         <div class="dataTables_scroll">
                             <div class="dataTables_scrollBody"
@@ -355,7 +355,7 @@
                                                         <label for="prdQty">Product Quantity</label>
                                                         <input type="number" class="form-control  is-valid" id="prdQty"
                                                                aria-describedby="prdQtyHelp" placeholder="Enter number"
-                                                               required="true">
+                                                               required="required" min="0">
                                                         <small id="prdQtyHelp" class="form-text text-muted">Please Input
                                                             the Product Quantity
                                                         </small>
@@ -374,57 +374,63 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="m-b-0">
-                                <div class="col-xs-12 col-sm-6 col-md-3">
-                                    <button class="btn btn-primary" type="submit">
-                                        Submit
-                                    </button>
-                                    <button type="reset" class="btn btn-secondary m-l-5">
-                                        Cancel
-                                    </button>
+                    </div>
+                    <!-- end card-->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <div name="datefilter" id="reportrange" class="form-control pull-right"
+                                     style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                    <i class="fa fa-calendar"></i>&nbsp;
+                                    <span>March 16, 2019 - April 14, 2019</span> <b class="caret"></b>
                                 </div>
-                                <div class="col-xs-12 col-sm-6 col-md-3">
-                                    <input type="text" class="form-control" name="daterange"
-                                           value="01/01/2015 - 01/31/2015">
-                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <a role="button" class="btn btn-primary" href="#">Submit</a>
+                                <a role="button" class="btn btn-secondary" href="#">Close</a>
                             </div>
                         </div>
                     </div>
-                </div><!-- end card-->
+                </div>
+                <!-- end row -->
             </div>
-
-            <!-- end row -->
-
-
+            <!-- END container-fluid -->
         </div>
-        <!-- END container-fluid -->
-
+        <!-- END content -->
     </div>
-    <!-- END content -->
-</div>
-<!-- END content-page -->
-<jsp:include page="/WEB-INF/views/partial/footer.jsp" flush="true"/>
+    <!-- END content-page -->
+    <jsp:include page="/WEB-INF/views/partial/footer.jsp" flush="true"/>
 
 
-<!-- Page JS-->
-<script src='<spring:url value="/statics/js/page/lotPlan.js"/>'></script>
-<!-- BEGIN Java Script for this page -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
-<!-- END Java Script for this page -->
-<script>
-    lotPlanPage.init();
-    $(function () {
-        $('input[name="daterange"]').daterangepicker({
-            opens: 'left'
-        }, function (start, end, label) {
-            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    <!-- Page JS-->
+    <script src='<spring:url value="/statics/js/page/lotPlan.js"/>'></script>
+    <!-- BEGIN Java Script for this page -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <!-- END Java Script for this page -->
+    <script>
+        lotPlanPage.init();
+        $(function () {
+
+            $('div[name="datefilter"]').daterangepicker({
+                autoUpdateInput: true,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            $('div[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            });
+
+            $('div[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+            });
+
         });
-    });
-</script>
-<!-- END Java Script for this page -->
+    </script>
+    <!-- END Java Script for this page -->
 
 </body>
 </html>
