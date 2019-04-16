@@ -1,10 +1,10 @@
 package com.iss.rs.entity;
 
 
-public class Oven {
+public class Oven extends AbstractPersistable {
 
     private String ovenId;
-    private long temperature;
+    private int temperature;
     private String processType;
 
 
@@ -17,11 +17,11 @@ public class Oven {
     }
 
 
-    public long getTemperature() {
+    public int getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(long temperature) {
+    public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
 
@@ -32,6 +32,15 @@ public class Oven {
 
     public void setProcessType(String processType) {
         this.processType = processType;
+    }
+
+    public String getLabel() {
+        return ovenId;
+    }
+
+    @Override
+    public String toString() {
+        return ovenId;
     }
 
 }

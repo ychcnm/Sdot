@@ -5,8 +5,8 @@ public class Productinfo {
 
     private String productType;
     private double volume;
-    private long temperature;
-    private long bakeTime;
+    private int temperature;
+    private int bakeTime;
     private double aoiTime;
 
 
@@ -32,17 +32,24 @@ public class Productinfo {
         return temperature;
     }
 
-    public void setTemperature(long temperature) {
+    public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
 
-
-    public long getBakeTime() {
+    public int getBakeTime() {
         return bakeTime;
     }
 
-    public void setBakeTime(long bakeTime) {
+    public void setBakeTime(int bakeTime) {
         this.bakeTime = bakeTime;
+    }
+
+    public double getAoiTime() {
+        return aoiTime;
+    }
+
+    public void setAoiTime(double aoiTime) {
+        this.aoiTime = aoiTime;
     }
 
     @Override
@@ -55,13 +62,4 @@ public class Productinfo {
                 ", aoiTime=" + aoiTime +
                 '}';
     }
-
-    public double getAoiTime() {
-        return aoiTime;
-    }
-
-    public void setAoiTime(double aoiTime) {
-        this.aoiTime = aoiTime;
-    }
-
 }

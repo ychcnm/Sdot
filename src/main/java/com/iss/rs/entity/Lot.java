@@ -3,19 +3,23 @@ package com.iss.rs.entity;
 
 public class Lot {
 
-    private long lotId;
+    private String lotId;
     private String productType;
+    private Productinfo productinfo;
     private long lotSize;
 
+    /**
+     * Multiply by {@link TimeGrain#GRAIN_LENGTH_IN_MINUTES} to get duration in minutes.
+     */
+    private int durationInGrains;
 
-    public long getLotId() {
+    public String getLotId() {
         return lotId;
     }
 
-    public void setLotId(long lotId) {
+    public void setLotId(String lotId) {
         this.lotId = lotId;
     }
-
 
     public String getProductType() {
         return productType;
@@ -25,6 +29,13 @@ public class Lot {
         this.productType = productType;
     }
 
+    public Productinfo getProductinfo() {
+        return productinfo;
+    }
+
+    public void setProductinfo(Productinfo productinfo) {
+        this.productinfo = productinfo;
+    }
 
     public long getLotSize() {
         return lotSize;
@@ -34,4 +45,29 @@ public class Lot {
         this.lotSize = lotSize;
     }
 
+    public int getDurationInGrains() {
+        return durationInGrains;
+    }
+
+    public void setDurationInGrains(int durationInGrains) {
+        this.durationInGrains = durationInGrains;
+    }
+
+// ************************************************************************
+    // Complex methods
+    // ************************************************************************
+
+
+    public String getDurationString() {
+        return (durationInGrains * TimeGrain.GRAIN_LENGTH_IN_MINUTES) / 60 + " hours";
+    }
+
+    public String getLabel() {
+        return lotId;
+    }
+
+    @Override
+    public String toString() {
+        return lotId;
+    }
 }

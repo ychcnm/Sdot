@@ -1,0 +1,45 @@
+package solver;
+    dialect "java"
+
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+
+
+import com.iss.rs.entity.Lot;
+import com.iss.rs.entity.LotAssignment;
+import com.iss.rs.entity.LotSchedule;
+import com.iss.rs.entity.Oven;
+import com.iss.rs.entity.Productinfo;
+import com.iss.rs.entity.TimeGrain;
+
+global HardSoftScoreHolder scoreHolder;
+
+// ############################################################################
+// Hard constraints usually
+// ############################################################################
+
+rule "Temperature conflict"
+    when
+        LotAssignment(ifTempEqual() != true)
+    then
+        scoreHolder.penalize(kcontext);
+end
+
+rule "Lot Time Duration Conflict"
+    when
+        LotAssignment(ifTimeEqual() != true)
+    then
+        scoreHolder.penalize(kcontext);
+end
+
+rule "Oven Capacity Conflict"
+when
+        LotAssignment(getAllCapacity() > 100)
+    then
+        scoreHolder.penalize(kcontext);
+end
+
+
+
+
+
+
