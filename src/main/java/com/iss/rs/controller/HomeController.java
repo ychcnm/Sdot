@@ -1,7 +1,11 @@
 package com.iss.rs.controller;
 
-import com.iss.rs.entity.LotConstrainConfiguration;
-import com.iss.rs.entity.LotSchedule;
+import com.iss.rs.domain.*;
+import com.iss.rs.entity.Lot;
+import com.iss.rs.entity.Oven;
+import com.iss.rs.entity.Productinfo;
+import com.iss.rs.service.LotService;
+import com.iss.rs.service.OvenService;
 import com.iss.rs.service.ProductService;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
@@ -11,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping("/home")
@@ -20,37 +26,15 @@ public class HomeController {
             = "solver/lotSchedulingSolverConfig.xml";
     //添加一个日志器
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-    private static final int[] startingHourOfDayOptions = {
-            0 * 60, // 00:00
-            1 * 60, // 01:00
-            2 * 60, // 02:00
-            3 * 60, // 03:00
-            4 * 60, // 04:00
-            5 * 60, // 05:00
-            6 * 60, // 06:00
-            7 * 60, // 07:00
-            8 * 60, // 08:00
-            9 * 60, // 09:00
-            10 * 60, // 10:00
-            11 * 60, // 11:00
-            13 * 60, // 13:00
-            14 * 60, // 14:00
-            15 * 60, // 15:00
-            16 * 60, // 16:00
-            17 * 60, // 17:00
-            18 * 60, // 18:00
-            19 * 60, // 19:00
-            20 * 60, // 20:00
-            21 * 60, // 21:00
-            22 * 60, // 22:00
-            23 * 60, // 23:00
-    };
-    private final int[] durationInGrainsOptions = {
-            1, // 12 hours
-            2, // 24 hours
-    };
+
     @Resource(name = "ProductService")
     private ProductService productService;
+
+    @Resource(name = "OvenService")
+    private OvenService ovenService;
+
+    @Resource(name = "LotService")
+    private LotService lotService;
 
     //映射一个action
     @RequestMapping("/index")
@@ -58,21 +42,116 @@ public class HomeController {
         //输出日志文件
         logger.info("the first jsp pages");
         //返回一个index.jsp这个视图
+        return "index";
+    }
 
-        InputStream ins = this.getClass().getResourceAsStream(SOLVER_CONFIG);
-        SolverFactory<LotSchedule> solverFactory = SolverFactory.createFromXmlInputStream(ins);
-        Solver<LotSchedule> solver = solverFactory.buildSolver();
+    @RequestMapping("/test")
+    public String test() throws Exception {
+        //输出日志文件
+        logger.info("the test jsp pages");
+        //返回一个index.jsp这个视图
+
+        List<Day> dayList = new ArrayList<>(7);
+        List<TimeGrain> timeGrainList = new ArrayList<>();
+        int k = 0;
+        long dayId = 0L, timeGrainId = 0L;
+        while (k < 7) {
+            Day day = new Day();
+            day.setId(dayId++);
+            day.setDayOfYear(105 + k);
+            dayList.add(day);
+
+            for (int j = 0; j < 24; j++) {
+                TimeGrain timeGrain = new TimeGrain();
+                timeGrain.setId(timeGrainId);
+                timeGrain.setGrainIndex((int) timeGrainId++);
+                timeGrain.setDay(day);
+                timeGrain.setStartingMinuteOfDay(0 + j * 60);
+                timeGrainList.add(timeGrain);
+            }
+            k++;
+        }
+
+        List<Productinfo> productinfoList = productService.getAllProduct();
+        List<Oven> ovenList = ovenService.getAllOven();
+        Long ovenId = 0L;
+        for (Oven o : ovenList) {
+            o.setId(ovenId++);
+        }
+
+        List<Lot> lotList = lotService.getAllLot();
+
+        Long lotId = 0L;
+        for (Lot l : lotList) {
+            l.setId(lotId++);
+        }
+
+        List<LotAssignment> lotAssignment = new ArrayList<>();
+        Long LPId = 0L;
+        List<LotPackage> lotPackagesList = new ArrayList<>();
+
+        HashMap<String, Double> filter = new HashMap<>();
+        HashMap<String, List<Lot>> container = new HashMap<>();
+
+        for (Lot l : lotList) {
+            int time = l.getProductinfo().getBakeTime();
+            int temp = l.getProductinfo().getTemperature();
+            String s = Integer.toString(time) + temp;
+            if (filter.get(s) == null) {
+                filter.put(s, l.getRequiredCapacity());
+                List<Lot> llist = new ArrayList<>();
+                llist.add(l);
+                container.put(s, llist);
+            } else {
+                if (filter.get(s) + l.getRequiredCapacity() > 100.0) {
+                    LotPackage lp = new LotPackage(container.get(s), LPId++, temp, time, filter.get(s));
+                    lp.setId(lp.getLotPackageId());
+                    lotPackagesList.add(lp);
+
+                    filter.remove(s);
+                    container.remove(s);
+
+                    filter.put(s, l.getRequiredCapacity());
+                    List<Lot> llist = new ArrayList<>();
+                    llist.add(l);
+                    container.put(s, llist);
+
+                } else {
+                    double n = filter.get(s) + l.getRequiredCapacity();
+                    List<Lot> llist = container.get(s);
+                    llist.add(l);
+                    filter.put(s, n);
+                    container.put(s, llist);
+                }
+            }
+        }
+
+        for (LotPackage l : lotPackagesList) {
+            LotAssignment la = new LotAssignment();
+            la.setLotPackage(l);
+            la.setId(l.getId());
+            lotAssignment.add(la);
+        }
+
         LotSchedule unassignment = new LotSchedule();
+        unassignment.setDayList(dayList);
+        unassignment.setTimeGrainList(timeGrainList);
+        unassignment.setOvenList(ovenList);
+        unassignment.setLotList(lotPackagesList);
+        unassignment.setLotAssignmentList(lotAssignment);
 
-
-        LotSchedule lotSchedule = new LotSchedule();
-        lotSchedule.setId(0L);
+        unassignment.setId(0L);
         LotConstrainConfiguration constraintConfiguration = new LotConstrainConfiguration();
         constraintConfiguration.setId(0L);
-        lotSchedule.setConstraintConfiguration(constraintConfiguration);
+        unassignment.setConstraintConfiguration(constraintConfiguration);
 
+        SolverFactory<LotSchedule> solverFactory = SolverFactory.createFromXmlResource(SOLVER_CONFIG);
+        Solver<LotSchedule> solver = solverFactory.buildSolver();
 
         LotSchedule assigned = solver.solve(unassignment);//启动引擎
-        return "index";
+
+        System.out.println(assigned);
+        return "test";
+
     }
 }

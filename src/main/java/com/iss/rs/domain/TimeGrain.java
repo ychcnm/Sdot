@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.iss.rs.entity;
+package com.iss.rs.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,7 +26,6 @@ public class TimeGrain extends AbstractPersistable {
      * Time granularity is 15 minutes (which is often recommended when dealing with humans for practical purposes).
      */
     public static final int GRAIN_LENGTH_IN_MINUTES = 60;
-
 
     private int grainIndex; // unique
 

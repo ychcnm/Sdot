@@ -1,4 +1,4 @@
-package com.iss.rs.entity;
+package com.iss.rs.domain;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.optaplanner.core.api.domain.lookup.PlanningId;

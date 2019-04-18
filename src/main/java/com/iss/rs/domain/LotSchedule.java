@@ -1,5 +1,6 @@
-package com.iss.rs.entity;
+package com.iss.rs.domain;
 
+import com.iss.rs.entity.Oven;
 import org.optaplanner.core.api.domain.constraintweight.ConstraintConfigurationProvider;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningScore;
@@ -16,7 +17,7 @@ public class LotSchedule extends AbstractPersistable {
     private LotConstrainConfiguration constraintConfiguration;
 
     @ProblemFactCollectionProperty
-    private List<Lot> LotList;
+    private List<LotPackage> LotList;
 
     @ProblemFactCollectionProperty
     private List<Day> dayList;
@@ -43,11 +44,11 @@ public class LotSchedule extends AbstractPersistable {
         this.constraintConfiguration = constraintConfiguration;
     }
 
-    public List<Lot> getLotList() {
+    public List<LotPackage> getLotList() {
         return LotList;
     }
 
-    public void setLotList(List<Lot> lotList) {
+    public void setLotList(List<LotPackage> lotList) {
         LotList = lotList;
     }
 

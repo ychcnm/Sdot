@@ -1,6 +1,8 @@
 package com.iss.rs.entity;
 
 
+import com.iss.rs.domain.AbstractPersistable;
+
 public class Lot extends AbstractPersistable {
 
     private String lotId;
@@ -54,10 +56,6 @@ public class Lot extends AbstractPersistable {
 
     public String getDurationString() {
         return (productinfo.getBakeTime()) + " hours";
-    }
-
-    public int getDurationInGrains() {
-        return productinfo.getBakeTime() / 12;
     }
 
 }

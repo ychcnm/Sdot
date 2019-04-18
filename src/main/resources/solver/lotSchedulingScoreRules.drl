@@ -5,41 +5,52 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
 
 
 import com.iss.rs.entity.Lot;
-import com.iss.rs.entity.LotAssignment;
-import com.iss.rs.entity.LotSchedule;
+import com.iss.rs.domain.LotAssignment;
+import com.iss.rs.domain.LotSchedule;
 import com.iss.rs.entity.Oven;
 import com.iss.rs.entity.Productinfo;
-import com.iss.rs.entity.TimeGrain;
+import com.iss.rs.domain.TimeGrain;
 
 global HardSoftScoreHolder scoreHolder;
 
 // ############################################################################
 // Hard constraints usually
 // ############################################################################
+rule "Oven conflict"
+    when
+        $leftAssignment : LotAssignment(oven != null, $leftId : id, $oven : oven)
+        $rightAssignment : LotAssignment(oven == $oven, calculateOverlap($leftAssignment) > 0, id > $leftId)
+
+    then
+        scoreHolder.penalize(kcontext);
+end
+
+rule "Don't go in overtime"
+    when
+        LotAssignment(startingTimeGrain != null, $lastTimeGrainIndex : getLastTimeGrainIndex())
+        not TimeGrain(grainIndex == $lastTimeGrainIndex)
+    then
+        scoreHolder.penalize(kcontext, $lastTimeGrainIndex);
+end
+
+rule "Capacity conflict"
+    when
+        LotAssignment( ovenCapacity < requiredCapacity, $requiredCapacity : requiredCapacity, $ovenCapacity : ovenCapacity)
+    then
+        scoreHolder.penalize(kcontext, $requiredCapacity - $ovenCapacity);
+end
+
 
 rule "Temperature conflict"
     when
-        LotAssignment(ifTempEqual() != true)
+        LotAssignment(ovenTemperature != requiredTemperature )
     then
         scoreHolder.penalize(kcontext);
 end
 
-rule "Lot Time Duration Conflict"
+rule "Do all lot as soon as possible"
     when
-        LotAssignment(ifTimeEqual() != true)
+        LotAssignment(startingTimeGrain != null, $lastTimeGrainIndex : lastTimeGrainIndex)
     then
-        scoreHolder.penalize(kcontext);
+        scoreHolder.penalize(kcontext, $lastTimeGrainIndex);
 end
-
-rule "Oven Capacity Conflict"
-when
-        LotAssignment(getAllCapacity() > 100)
-    then
-        scoreHolder.penalize(kcontext);
-end
-
-
-
-
-
-

@@ -1,6 +1,8 @@
 package com.iss.rs.entity;
 
 
+import com.iss.rs.domain.AbstractPersistable;
+
 public class Oven extends AbstractPersistable {
 
     private String ovenId;

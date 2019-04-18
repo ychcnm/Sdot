@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.iss.rs.entity;
+package com.iss.rs.domain;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
