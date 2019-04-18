@@ -4,16 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.iss.rs.mapper.ProductInfoMapper">
 
-    <resultMap type="Productinfo" id="allProduct">
-        <!-- map table "person"column to class "Person" property -->
-        <id column="productType" property="productType"/>
-        <result property="volume" column="volume"/>
-        <result property="temperature" column="temperature"/>
-        <result property="bakeTime" column="bakeTime"/>
-        <result property="aoiTime" column="aoiTime"/>
-    </resultMap>
 
-    <select id="getAllProduct" resultMap="allProduct">
+    <select id="getAllProduct" resultType="Productinfo">
         SELECT * FROM productinfo
     </select>
 

@@ -1,17 +1,12 @@
 package com.iss.rs.entity;
 
 
-public class Lot {
+public class Lot extends AbstractPersistable {
 
     private String lotId;
     private String productType;
     private Productinfo productinfo;
     private long lotSize;
-
-    /**
-     * Multiply by {@link TimeGrain#GRAIN_LENGTH_IN_MINUTES} to get duration in minutes.
-     */
-    private int durationInGrains;
 
     public String getLotId() {
         return lotId;
@@ -45,29 +40,24 @@ public class Lot {
         this.lotSize = lotSize;
     }
 
-    public int getDurationInGrains() {
-        return durationInGrains;
-    }
-
-    public void setDurationInGrains(int durationInGrains) {
-        this.durationInGrains = durationInGrains;
-    }
-
 // ************************************************************************
     // Complex methods
     // ************************************************************************
 
+    public double getRequiredCapacity() {
+        return productinfo.getVolume() * lotSize;
+    }
+
+    public int getDuration() {
+        return productinfo.getBakeTime();
+    }
 
     public String getDurationString() {
-        return (durationInGrains * TimeGrain.GRAIN_LENGTH_IN_MINUTES) / 60 + " hours";
+        return (productinfo.getBakeTime()) + " hours";
     }
 
-    public String getLabel() {
-        return lotId;
+    public int getDurationInGrains() {
+        return productinfo.getBakeTime() / 12;
     }
 
-    @Override
-    public String toString() {
-        return lotId;
-    }
 }

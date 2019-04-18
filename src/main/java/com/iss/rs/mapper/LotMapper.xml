@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iss.rs.mapper.LotMapper">
+
+    <select id="getAllLot" resultMap="LotResultMap">
+		select * from lot l,productinfo p
+		where l.productType = p.productType
+	</select>
+
+    <resultMap type="Lot" id="LotResultMap">
+        <id column="lotId" property="lotId"/>
+        <result column="productType" property="productType"/>
+        <result column="lotSize" property="lotSize"/>
+        <association property="productinfo" javaType="Productinfo">
+            <id column="productType" property="productType"/>
+            <result column="volume" property="volume"/>
+            <result column="temperature" property="temperature"/>
+            <result column="bakeTime" property="bakeTime"/>
+            <result column="aoiTime" property="aoiTime"/>
+        </association>
+    </resultMap>
+
+</mapper>

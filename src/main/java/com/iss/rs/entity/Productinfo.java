@@ -28,13 +28,14 @@ public class Productinfo {
     }
 
 
-    public long getTemperature() {
+    public int getTemperature() {
         return temperature;
     }
 
     public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
+
 
     public int getBakeTime() {
         return bakeTime;
@@ -44,6 +45,7 @@ public class Productinfo {
         this.bakeTime = bakeTime;
     }
 
+
     public double getAoiTime() {
         return aoiTime;
     }
@@ -52,14 +54,4 @@ public class Productinfo {
         this.aoiTime = aoiTime;
     }
 
-    @Override
-    public String toString() {
-        return "Productinfo{" +
-                "productType='" + productType + '\'' +
-                ", volume=" + volume +
-                ", temperature=" + temperature +
-                ", bakeTime=" + bakeTime +
-                ", aoiTime=" + aoiTime +
-                '}';
-    }
 }
