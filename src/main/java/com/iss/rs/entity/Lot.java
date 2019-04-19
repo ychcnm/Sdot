@@ -8,7 +8,17 @@ public class Lot extends AbstractPersistable {
     private String lotId;
     private String productType;
     private Productinfo productinfo;
-    private long lotSize;
+    private int lotSize;
+
+    public Lot(String lotId, String productType, Productinfo productinfo, int lotSize) {
+        this.lotId = lotId;
+        this.productType = productType;
+        this.productinfo = productinfo;
+        this.lotSize = lotSize;
+    }
+
+    public Lot(String s, Productinfo pi, String valueOf) {
+    }
 
     public String getLotId() {
         return lotId;
@@ -34,11 +44,11 @@ public class Lot extends AbstractPersistable {
         this.productinfo = productinfo;
     }
 
-    public long getLotSize() {
+    public int getLotSize() {
         return lotSize;
     }
 
-    public void setLotSize(long lotSize) {
+    public void setLotSize(int lotSize) {
         this.lotSize = lotSize;
     }
 

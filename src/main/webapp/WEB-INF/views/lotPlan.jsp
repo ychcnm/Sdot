@@ -21,6 +21,9 @@
     <!-- Bootstrap CSS -->
     <link href='<spring:url value="/statics/assets/css/bootstrap.min.css"/>' rel="stylesheet" type="text/css"/>
 
+    <!-- Switchery css -->
+    <link href='<spring:url value="/statics/assets/plugins/switchery/switchery.min.css"/>' rel="stylesheet"/>
+
     <!-- Font Awesome CSS -->
     <link href='<spring:url value="/statics/assets/font-awesome/css/font-awesome.min.css"/>' rel="stylesheet"
           type="text/css"/>
@@ -103,7 +106,7 @@
                                         <th width="120">Actions</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="lotTableBody">
                                     </tbody>
                                 </table>
                             </div>
@@ -183,59 +186,36 @@
                     <!-- end card-->
                     <div class="card-body">
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <div name="datefilter" id="reportrange" class="form-control pull-right"
-                                     style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                                    <i class="fa fa-calendar"></i>&nbsp;
-                                    <span>March 16, 2019 - April 14, 2019</span> <b class="caret"></b>
-                                </div>
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <input id="scheduleTime" type='text' class="form-control" name="daterange"
+                                       value=""/>
                             </div>
-                            <div class="form-group col-md-6">
-                                <a role="button" class="btn btn-primary" href="#">Submit</a>
-                                <a role="button" class="btn btn-secondary" href="#">Close</a>
+                            <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <a id="submitLot" role="button" class="btn btn-primary" href="#">Submit</a>
+                                <a id="clearLot" role="button" class="btn btn-secondary" href="#">Clear</a>
                             </div>
                         </div>
                     </div>
+                    <!-- end row -->
                 </div>
-                <!-- end row -->
+                <!-- END container-fluid -->
             </div>
-            <!-- END container-fluid -->
+            <!-- END content -->
         </div>
-        <!-- END content -->
-    </div>
-    <!-- END content-page -->
-    <jsp:include page="/WEB-INF/views/partial/footer.jsp" flush="true"/>
+        <!-- END content-page -->
+        <jsp:include page="/WEB-INF/views/partial/footer.jsp" flush="true"/>
 
 
-    <!-- Page JS-->
-    <script src='<spring:url value="/statics/js/page/lotPlan.js"/>'></script>
-    <!-- BEGIN Java Script for this page -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
-    <!-- END Java Script for this page -->
-    <script>
-        lotPlanPage.init();
-        $(function () {
-
-            $('div[name="datefilter"]').daterangepicker({
-                autoUpdateInput: true,
-                locale: {
-                    cancelLabel: 'Clear'
-                }
-            });
-
-            $('div[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-            });
-
-            $('div[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
-                $(this).val('');
-            });
-
-        });
-    </script>
-    <!-- END Java Script for this page -->
+        <!-- Page JS-->
+        <script src='<spring:url value="/statics/js/page/lotPlan.js"/>'></script>
+        <!-- BEGIN Java Script for this page -->
+        <script src='<spring:url value="/statics/assets/plugins/datetimepicker/js/moment.min.js"/>'></script>
+        <script src='<spring:url value="/statics/assets/plugins/datetimepicker/js/daterangepicker.js"/>'></script>
+        <!-- END Java Script for this page -->
+        <script>
+            lotPlanPage.init();
+        </script>
+        <!-- END Java Script for this page -->
 
 </body>
 </html>

@@ -8,4 +8,6 @@ public interface ProductInfoMapper {
     List<Productinfo> getAllProduct();
 
     List<String> getProductType(String series);
+
+    Productinfo getProductInfo(String type);
 }

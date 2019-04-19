@@ -45,7 +45,9 @@
     <!-- BEGIN CSS for this page -->
     <link href='<spring:url value="/statics/assets/plugins/jquery.filer/css/jquery.filer.css"/>' rel="stylesheet"/>
     <link href='<spring:url value="/statics/assets/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css"/>'
-          rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+    <link href='<spring:url value="/statics/assets/plugins/datetimepicker/css/daterangepicker.css"/>' rel="stylesheet">
+    rel="stylesheet"/>
     <!-- END CSS for this page -->
 
 </head>
@@ -106,9 +108,18 @@
                             </div>
 
                             <div class="card-body">
-
-                                <input type="file" name="files[]" id="filer" multiple="multiple">
-
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <input type="file" name="files[]" id="uploadLot" multiple="multiple">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <input id="scheduleTime" type='text' class="form-control" name="daterange"
+                                               value=""/>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <a id="submitLot" role="button" class="btn btn-primary" href="#">Process</a>
+                                    </div>
+                                </div>
                             </div>
                         </div><!-- end card-->
                     </div>
@@ -124,14 +135,7 @@
     </div>
     <!-- END content-page -->
 
-    <footer class="footer">
-		<span class="text-right">
-		Copyright <a target="_blank" href="#">Your Website</a>
-		</span>
-        <span class="float-right">
-		Powered by <a target="_blank" href="https://www.pikeadmin.com"><b>Pike Admin</b></a>
-		</span>
-    </footer>
+    <jsp:include page="/WEB-INF/views/partial/footer.jsp" flush="true"/>
 
 </div>
 <!-- END main -->
@@ -139,25 +143,25 @@
 
 <script src='<spring:url value="/statics/assets/js/jquery.scrollTo.min.js"/>'></script>
 <script src='<spring:url value="/statics/assets/plugins/switchery/switchery.min.js"/>'></script>
-
+<script src='<spring:url value="/statics/assets/plugins/datetimepicker/js/moment.min.js"/>'></script>
+<script src='<spring:url value="/statics/assets/plugins/datetimepicker/js/daterangepicker.js"/>'></script>
+<!-- Page JS-->
+<script src='<spring:url value="/statics/js/page/uploadLot.js"/>'></script>
 
 <!-- BEGIN Java Script for this page -->
 <script src='<spring:url value="/statics/assets/plugins/jquery.filer/js/jquery.filer.min.js"/>'></script>
 <script>
-    $(document).ready(function () {
-
-        'use-strict';
-        //Example 1
-        $("#filer").filer({
-            limit: null,
-            maxSize: null,
-            extensions: null,
-            changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>Drag & Drop files here</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn btn btn-custom">Browse Files</a></div></div>',
-            showThumbs: true,
-            theme: "dragdropbox",
-            templates: {
-                box: '<ul class="jFiler-items-list jFiler-items-grid"></ul>',
-                item: '<li class="jFiler-item">\
+    uploadLotPage.init();
+    $("#uploadLot").filer({
+        limit: null,
+        maxSize: null,
+        extensions: null,
+        changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>Drag & Drop files here</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn btn btn-custom">Browse Files</a></div></div>',
+        showThumbs: true,
+        theme: "dragdropbox",
+        templates: {
+            box: '<ul class="jFiler-items-list jFiler-items-grid"></ul>',
+            item: '<li class="jFiler-item">\
                         <div class="jFiler-item-container">\
                             <div class="jFiler-item-inner">\
                                 <div class="jFiler-item-thumb">\
@@ -179,75 +183,95 @@
                             </div>\
                         </div>\
                     </li>',
-                itemAppend: '',
-                progressBar: '<div class="bar"></div>',
-                itemAppendToEnd: false,
-                removeConfirmation: true,
-                _selectors: {
-                    list: '.jFiler-items-list',
-                    item: '.jFiler-item',
-                    progressBar: '.bar',
-                    remove: '.jFiler-item-trash-action'
-                }
-            },
-            dragDrop: {
-                dragEnter: null,
-                dragLeave: null,
-                drop: null,
-            },
-            uploadFile: {
-                url: "assets/plugins/jquery.filer/php/upload.php",
-                data: null,
-                type: 'POST',
-                enctype: 'multipart/form-data',
-                beforeSend: function () {
-                },
-                success: function (data, el) {
-                    var parent = el.find(".jFiler-jProgressBar").parent();
-                    el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
-                        $("<div class=\"jFiler-item-others text-success\"><i class=\"fa fa-plus\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
-                    });
-                },
-                error: function (el) {
-                    var parent = el.find(".jFiler-jProgressBar").parent();
-                    el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
-                        $("<div class=\"jFiler-item-others text-error\"><i class=\"fa fa-minus\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");
-                    });
-                },
-                statusCode: null,
-                onProgress: null,
-                onComplete: null
-            },
-            files: '',
-            addMore: false,
-            clipBoardPaste: true,
-            excludeName: null,
-            beforeRender: null,
-            afterRender: null,
-            beforeShow: null,
-            beforeSelect: null,
-            onSelect: null,
-            afterShow: null,
-            onRemove: function (itemEl, file, id, listEl, boxEl, newInputEl, inputEl) {
-                var file = file.name;
-                $.post('assets/plugins/jquery.filer/php/remove_file.php', {file: file});
-            },
-            onEmpty: null,
-            options: null,
-            captions: {
-                button: "Choose Files",
-                feedback: "Choose files To Upload",
-                feedback2: "files were chosen",
-                drop: "Drop file here to Upload",
-                removeConfirmation: "Are you sure you want to remove this file?",
-                errors: {
-                    filesLimit: "Only {{fi-limit}} files are allowed to be uploaded.",
-                    filesType: "Only Images are allowed to be uploaded.",
-                    filesSize: "{{fi-name}} is too large! Please upload file up to {{fi-maxSize}} MB.",
-                    filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
-                }
+            itemAppend: '<li class="jFiler-item">\
+                            <div class="jFiler-item-container">\
+                                <div class="jFiler-item-inner">\
+                                    <div class="jFiler-item-thumb">\
+                                        <div class="jFiler-item-status"></div>\
+                                        <div class="jFiler-item-info">\
+                                            <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                                            <span class="jFiler-item-others">{{fi-size2}}</span>\
+                                        </div>\
+                                        {{fi-image}}\
+                                    </div>\
+                                    <div class="jFiler-item-assets jFiler-row">\
+                                        <ul class="list-inline pull-left">\
+                                            <li><span class="jFiler-item-others">{{fi-icon}}</span></li>\
+                                        </ul>\
+                                        <ul class="list-inline pull-right">\
+                                            <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                                        </ul>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </li>',
+            progressBar: '<div class="bar"></div>',
+            itemAppendToEnd: false,
+            removeConfirmation: true,
+            _selectors: {
+                list: '.jFiler-items-list',
+                item: '.jFiler-item',
+                progressBar: '.bar',
+                remove: '.jFiler-item-trash-action'
             }
-        });
+        },
+        dragDrop: {
+            dragEnter: null,
+            dragLeave: null,
+            drop: null,
+        },
+        uploadFile: {
+            url: util.getContextPath() + "/lot/upload",
+            data: null,
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            beforeSend: function () {
+            },
+            success: function (data, el) {
+                var parent = el.find(".jFiler-jProgressBar").parent();
+                el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
+                    $("<div class=\"jFiler-item-others text-success\"><i class=\"fa fa-plus\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
+                });
+            },
+            error: function (el) {
+                var parent = el.find(".jFiler-jProgressBar").parent();
+                el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
+                    $("<div class=\"jFiler-item-others text-error\"><i class=\"fa fa-minus\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");
+                });
+            },
+            statusCode: null,
+            onProgress: null,
+            onComplete: null
+        },
+        files: '',
+        addMore: false,
+        clipBoardPaste: true,
+        excludeName: null,
+        beforeRender: null,
+        afterRender: null,
+        beforeShow: null,
+        beforeSelect: null,
+        onSelect: null,
+        afterShow: null,
+        onRemove: function (itemEl, file, id, listEl, boxEl, newInputEl, inputEl) {
+            var file = file.name;
+            $.post(util.getContextPath() + "/lot/delete", {file: file});
+        },
+        onEmpty: null,
+        options: null,
+        captions: {
+            button: "Choose Files",
+            feedback: "Choose files To Upload",
+            feedback2: "files were chosen",
+            drop: "Drop file here to Upload",
+            removeConfirmation: "Are you sure you want to remove this file?",
+            errors: {
+                filesLimit: "Only {{fi-limit}} files are allowed to be uploaded.",
+                filesType: "Only Images are allowed to be uploaded.",
+                filesSize: "{{fi-name}} is too large! Please upload file up to {{fi-maxSize}} MB.",
+                filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
+            }
+        }
     });
 </script>
 <!-- END Java Script for this page -->

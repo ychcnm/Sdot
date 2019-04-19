@@ -21,5 +21,9 @@ public class ProductService {
         return productInfoMapper.getProductType(series);
     }
 
+    public Productinfo getProductInfo(String type) {
+        return productInfoMapper.getProductInfo(type);
+    }
+
 
 }

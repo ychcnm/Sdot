@@ -12,10 +12,10 @@ import java.util.List;
 
 public class ListGenerator {
 
-    public void generateTimeList(List<Day> dayList, List<TimeGrain> timeGrainList) {
+    public void generateTimeList(List<Day> dayList, List<TimeGrain> timeGrainList, int gap) {
         int k = 0;
         long dayId = 0L, timeGrainId = 0L;
-        while (k < 7) {
+        while (k < gap) {
             Day day = new Day();
             day.setId(dayId++);
             day.setDayOfYear(105 + k);
@@ -71,6 +71,13 @@ public class ListGenerator {
                     container.put(s, llist);
                 }
             }
+        }
+
+        for (String key : filter.keySet()) {
+            List<Lot> llist = container.get(key);
+            LotPackage lp = new LotPackage(container.get(key), LPId++, container.get(key).get(0).getProductinfo().getTemperature(), container.get(key).get(0).getProductinfo().getBakeTime(), filter.get(key));
+            lp.setId(lp.getLotPackageId());
+            lotPackagesList.add(lp);
         }
 
         for (LotPackage l : lotPackagesList) {

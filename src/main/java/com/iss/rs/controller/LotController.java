@@ -10,21 +10,28 @@ import com.iss.rs.service.LotService;
 import com.iss.rs.service.OvenService;
 import com.iss.rs.service.ProductService;
 import com.iss.rs.util.ListGenerator;
+import com.opencsv.CSVReader;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Controller
 @RequestMapping("/lot")
@@ -33,12 +40,18 @@ public class LotController {
             = "solver/lotSchedulingSolverConfig.xml";
     //添加一个日志器
     private static final Logger logger = LoggerFactory.getLogger(LotController.class);
+    private static final String UPLOAD_FILE_SAVE_FOLDER = "/UPLOAD/";
+    @Autowired
+    ServletContext context;
     @Resource(name = "ProductService")
     private ProductService productService;
     @Resource(name = "OvenService")
     private OvenService ovenService;
     @Resource(name = "LotService")
     private LotService lotService;
+
+    @Autowired
+    private HttpServletRequest httpRequest;
 
     //映射一个action
     @RequestMapping("/choosePlan")
@@ -98,18 +111,124 @@ public class LotController {
         return productType;
     }
 
-    @RequestMapping("/test")
-    public String test() throws Exception {
-        //输出日志文件
-        logger.info("the test jsp pages");
-        //返回一个index.jsp这个视图
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public @ResponseBody
+    String delete(HttpServletRequest request) {
+        String fileName = request.getParameter("file");
+        String destFilePath = UPLOAD_FILE_SAVE_FOLDER + fileName;
+        String realPathtoUploads = httpRequest.getSession().getServletContext().getRealPath(destFilePath);
+        //Delete the file
+        try {
+            Files.delete(Paths.get(realPathtoUploads));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Map<String, Object> map = new HashMap<>();
+        return "Success";
+    }
 
-        List<Day> dayList = new ArrayList<>(7);
-        List<TimeGrain> timeGrainList = new ArrayList<>();
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, Object> upload(MultipartHttpServletRequest request, HttpServletResponse response) {
+        Iterator<String> itr = request.getFileNames();
+        Map<String, Object> map = new HashMap<>();
+        List<String> list = new ArrayList<>();
+
+        try {
+            StringBuffer msgBuf = new StringBuffer();
+
+            // Get multiple file control names.
+            Iterator<String> it = request.getFileNames();
+
+            while (it.hasNext()) {
+                String fileControlName = it.next();
+
+                MultipartFile srcFile = request.getFile(fileControlName);
+
+                String uploadFileName = srcFile.getOriginalFilename();
+
+                // Create server side target file path.
+                String destFilePath = UPLOAD_FILE_SAVE_FOLDER + uploadFileName;
+                String realPathtoUploads = httpRequest.getSession().getServletContext().getRealPath(destFilePath);
+
+                File destFile = new File(realPathtoUploads);
+
+                BufferedWriter w = Files.newBufferedWriter(Paths.get(realPathtoUploads));
+                w.write(new String(srcFile.getBytes()));
+                w.flush();
+                map.put("Status", 200);
+                map.put("Success file uploaded List", list);
+                return map;
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            map.put("Status", 500);
+            map.put("fail file uploaded List", list);
+            return map;
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/uploadSubmit", method = RequestMethod.POST)
+    public @ResponseBody
+    String uploadSubmit(MultipartHttpServletRequest request, HttpServletResponse response) {
+
+
+        Iterator<String> itr = request.getFileNames();
+        String time = request.getParameter("timeRange");
+        String[] dateArray = time.split("-");
+        String[] startDay = dateArray[0].trim().split("/");
+        String[] endDay = dateArray[1].trim().split("/");
+
+        Calendar c = Calendar.getInstance();
+
+        c.set(Integer.parseInt(startDay[2]), Integer.parseInt(startDay[0]), Integer.parseInt(startDay[1]));
+        int start = c.get(Calendar.DAY_OF_YEAR);
+        c.set(Integer.parseInt(endDay[2]), Integer.parseInt(endDay[0]), Integer.parseInt(endDay[1]));
+        int end = c.get(Calendar.DAY_OF_YEAR);
+
+
+        List<Lot> lotList = new ArrayList<>();
+
+        while (itr.hasNext()) {
+            String fileControlName = itr.next();
+            String uploadFileName = request.getFile(fileControlName).getOriginalFilename();
+
+            // Create server side target file path.
+            String destFilePath = UPLOAD_FILE_SAVE_FOLDER + uploadFileName;
+            String realPathtoUploads = httpRequest.getSession().getServletContext().getRealPath(destFilePath);
+
+            try {
+                FileReader filereader = new FileReader(realPathtoUploads);
+                CSVReader csvReader = new CSVReader(filereader);
+                String[] nextRecord;
+                csvReader.readNext();
+                int lotId = 0;
+                while ((nextRecord = csvReader.readNext()) != null) {
+
+                    Productinfo pi = productService.getProductInfo(nextRecord[3]);
+                    Integer size = Integer.valueOf(nextRecord[4]);
+                    String id = String.valueOf(lotId++);
+                    Lot l = new Lot(id, nextRecord[3], pi, size);
+                    l.setId((long) (lotId - 1));
+                    lotList.add(l);
+
+                    //Delete the file
+                    Files.delete(Paths.get(realPathtoUploads));
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         ListGenerator listGenerator = new ListGenerator();
 
-        listGenerator.generateTimeList(dayList, timeGrainList);
+        int gap = end - start;
+        List<Day> dayList = new ArrayList<>();
+        List<TimeGrain> timeGrainList = new ArrayList<>();
+        listGenerator.generateTimeList(dayList, timeGrainList, gap);
 
         List<Productinfo> productinfoList = productService.getAllProduct();
         List<Oven> ovenList = ovenService.getAllOven();
@@ -117,13 +236,6 @@ public class LotController {
         Long ovenId = 0L;
         for (Oven o : ovenList) {
             o.setId(ovenId++);
-        }
-
-        List<Lot> lotList = lotService.getAllLot();
-
-        Long lotId = 0L;
-        for (Lot l : lotList) {
-            l.setId(lotId++);
         }
 
         List<LotAssignment> lotAssignment = new ArrayList<>();
@@ -151,7 +263,6 @@ public class LotController {
         LotSchedule assigned = solver.solve(unassignment);//启动引擎
 
         System.out.println(assigned);
-
         HashMap<Oven, List<LotAssignment>> result = new HashMap<>();
 
         assigned.getLotAssignmentList().stream().forEach(l -> {
@@ -165,8 +276,6 @@ public class LotController {
                 result.put(l.getOven(), lp);
             }
         });
-
         return "test";
-
     }
 }

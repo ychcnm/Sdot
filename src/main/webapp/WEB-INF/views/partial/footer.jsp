@@ -30,7 +30,8 @@
 <script src='<spring:url value="/statics/assets/js/fastclick.js"/>'></script>
 <script src='<spring:url value="/statics/assets/js/jquery.blockUI.js"/>'></script>
 <script src='<spring:url value="/statics/assets/js/jquery.nicescroll.js"/>'></script>
-
+<script src='<spring:url value="/statics/assets/js/jquery.scrollTo.min.js"/>'></script>
+<script src='<spring:url value="/statics/assets/plugins/switchery/switchery.min.js"/>'></script>
 <!-- App js -->
 <script src='<spring:url value="/statics/assets/js/pikeadmin.js"/>'></script>
 

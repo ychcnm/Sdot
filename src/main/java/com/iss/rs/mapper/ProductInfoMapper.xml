@@ -15,4 +15,9 @@
         where productType like #{series}"%"
     </select>
 
+    <select id="getProductInfo" parameterType="string" resultType="Productinfo">
+        SELECT *
+        FROM productinfo
+        where productType = #{type}
+    </select>
 </mapper>

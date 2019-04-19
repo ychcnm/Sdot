@@ -12,8 +12,35 @@ let lotPlanPage = {
         request.myAjax(this.requestURL, this.JsonData, this.getProductSuccess,
             this.getProductFail);
         this.bindEvent();
+        this.timeInit();
+    },
+    timeInit: function () {
+        var today = new Date();
+        var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+        $('input[name="daterange"]').daterangepicker({
+            minDate: today
+        })
     },
     bindEvent: function () {
+        $('#submitLot').on('click', function () {
+            let time = $('input[name="daterange"]').val();
+            console.log(time);
+        });
+        $('#clearLot').on('click', function () {
+            $('#lotTableBody').html('');
+        });
+        $('input[name="daterange"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+        });
+        $('input[name="daterange"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+        $('input[name="daterange"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
         $('#prdSeries').on('change', function () {
             let series = $('#prdSeries').val();
             lotPlanPage.getProductType(series);

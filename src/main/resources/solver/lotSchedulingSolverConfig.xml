@@ -6,11 +6,12 @@
     <solutionClass>com.iss.rs.domain.LotSchedule</solutionClass>
     <entityClass>com.iss.rs.domain.LotAssignment</entityClass>
 
+
     <scoreDirectorFactory>
         <scoreDrl>solver/lotSchedulingScoreRules.drl</scoreDrl>
     </scoreDirectorFactory>
 
     <termination>
-        <minutesSpentLimit>1</minutesSpentLimit>
+        <minutesSpentLimit>2</minutesSpentLimit>
     </termination>
 </solver>
