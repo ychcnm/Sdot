@@ -13,7 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Home Page</title>
+    <title>Choose Plan</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href='<spring:url value="/statics/assets/images/favicon.ico"/>'>
@@ -59,24 +59,44 @@
 
         <!-- Start content -->
         <div class="content">
-
             <div class="container-fluid">
-
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="breadcrumb-holder">
-                            <h1 class="main-title float-left">Dashboard</h1>
+                            <h1 class="main-title float-left">Choose Plan</h1>
                             <ol class="breadcrumb float-right">
-                                <li class="breadcrumb-item">Home</li>
-                                <li class="breadcrumb-item active">Dashboard</li>
+                                <li class="breadcrumb-item">Lot</li>
+                                <li class="breadcrumb-item active">Choose Plan</li>
                             </ol>
                             <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
                 <!-- end row -->
+                <div class="row">
 
+                    <div class="col-xs-12 col-md-12 col-lg-6 col-xl-6">
+                        <a class="active" href="${pageContext.request.contextPath}/lot/upload">
+                            <div class="card-box noradius noborder bg-default">
+                                <i class="fa fa-file-text-o float-right text-white"></i>
+                                <h6 class="text-white text-uppercase m-b-20">Option One</h6>
+                                <h1 class="m-b-20 text-white counter">Upload the CSV File</h1>
+                                <span class="text-white">&nbsp;</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-12 col-md-12 col-lg-6 col-xl-6">
+                        <a class="active" href="${pageContext.request.contextPath}/lot/lotPlan">
+                            <div class="card-box noradius noborder bg-info">
+                                <i class="fa fa-user-o float-right text-white"></i>
+                                <h6 class="text-white text-uppercase m-b-20">Option Two</h6>
+                                <h1 class="m-b-20 text-white counter">Create the Lot Plan</h1>
+                                <span class="text-white">&nbsp;</span>
+                            </div>
+                        </a>
+                    </div>
 
+                </div>
             </div>
             <!-- end row -->
 
@@ -94,9 +114,8 @@
 <!-- END content-page -->
 
 <jsp:include page="/WEB-INF/views/partial/footer.jsp" flush="true"/>
-
-</div>
 <!-- END main -->
+
 
 <script>
 </script>

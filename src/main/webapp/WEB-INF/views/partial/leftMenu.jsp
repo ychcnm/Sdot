@@ -22,7 +22,8 @@
                 </li>
 
                 <li class="submenu">
-                    <a href="${pageContext.request.contextPath}/lot"><i class="fa fa-clock-o bigfonts"></i><span> Lot Planner </span>
+                    <a href="${pageContext.request.contextPath}/lot/choosePlan"><i
+                            class="fa fa-clock-o bigfonts"></i><span> Lot Planner </span>
                     </a>
                 </li>
             </ul>
