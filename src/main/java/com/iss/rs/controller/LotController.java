@@ -171,9 +171,9 @@ public class LotController {
 
     @RequestMapping(value = "/uploadSubmit", method = RequestMethod.POST)
     public @ResponseBody
-    String uploadSubmit(MultipartHttpServletRequest request, HttpServletResponse response) {
+    Map<String, Object> uploadSubmit(MultipartHttpServletRequest request, HttpServletResponse response) {
 
-
+        Map<String, Object> map = new HashMap<>();
         Iterator<String> itr = request.getFileNames();
         String time = request.getParameter("timeRange");
         String[] dateArray = time.split("-");
@@ -212,10 +212,9 @@ public class LotController {
                     Lot l = new Lot(id, nextRecord[3], pi, size);
                     l.setId((long) (lotId - 1));
                     lotList.add(l);
-
-                    //Delete the file
-                    Files.delete(Paths.get(realPathtoUploads));
                 }
+                //Delete the file
+                Files.delete(Paths.get(realPathtoUploads));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -276,6 +275,8 @@ public class LotController {
                 result.put(l.getOven(), lp);
             }
         });
-        return "test";
+        map.put("Status", 200);
+        map.put("Process Successful", result);
+        return map;
     }
 }

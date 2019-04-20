@@ -23,6 +23,9 @@
     <!-- Switchery css -->
     <link href='<spring:url value="/statics/assets/plugins/switchery/switchery.min.css"/>'>
 
+    <!-- loader css -->
+    <link href='<spring:url value="/statics/assets/css/loader.css"/>' rel="stylesheet" type="text/css"/>
+
     <!-- Bootstrap CSS -->
     <link href='<spring:url value="/statics/assets/css/bootstrap.min.css"/>' rel="stylesheet" type="text/css"/>
 
@@ -45,6 +48,7 @@
     <!-- BEGIN CSS for this page -->
     <link href='<spring:url value="/statics/assets/plugins/jquery.filer/css/jquery.filer.css"/>' rel="stylesheet"/>
     <link href='<spring:url value="/statics/assets/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css"/>'
+          rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
     <link href='<spring:url value="/statics/assets/plugins/datetimepicker/css/daterangepicker.css"/>' rel="stylesheet">
     rel="stylesheet"/>
@@ -106,7 +110,6 @@
                                 <h3><i class="fa fa-file"></i>Upload Lot For Planner</h3>
                                 Files upload with drag & drop
                             </div>
-
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -117,7 +120,11 @@
                                                value=""/>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                        <a id="submitLot" role="button" class="btn btn-primary" href="#">Process</a>
+                                        <div class="row" id="processBar">
+                                            <button id="submitLot" class="btn btn-primary" type="button">
+                                                Process
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
