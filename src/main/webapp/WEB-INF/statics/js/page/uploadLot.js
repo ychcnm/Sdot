@@ -53,7 +53,7 @@ uploadLotPage = {
                     uploadLotPage.displayResult(data);
                 },
                 error: function (err) {
-                    alert(err);
+                    alert("Server error!");
                     let load = "   <button id=\"submitLot\" class=\"btn btn-primary\" type=\"button\">\n" +
                         "                                                Process\n" +
                         "                                            </button>";

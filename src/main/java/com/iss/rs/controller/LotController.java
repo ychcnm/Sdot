@@ -307,7 +307,9 @@ public class LotController {
                 csvReader.readNext();
                 int lotId = 0;
                 while ((nextRecord = csvReader.readNext()) != null) {
-
+                    if (nextRecord[5] == "0") {
+                        continue;
+                    }
                     Productinfo pi = productService.getProductInfo(nextRecord[3]);
                     Integer size = Integer.valueOf(nextRecord[4]);
                     String id = String.valueOf(lotId++);
