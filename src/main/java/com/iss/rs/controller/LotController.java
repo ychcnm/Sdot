@@ -1,7 +1,9 @@
 package com.iss.rs.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.iss.rs.domain.*;
 import com.iss.rs.entity.Lot;
 import com.iss.rs.entity.Oven;
@@ -29,6 +31,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -126,6 +129,104 @@ public class LotController {
         Map<String, Object> map = new HashMap<>();
         return "Success";
     }
+
+
+    @RequestMapping(value = "/lotSubmit.do", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, Object> lotSubmit(@RequestBody String data) {
+        Gson gson = new Gson();
+        String series = gson.fromJson(data, JsonObject.class).get("timeRange").getAsString();
+        JsonElement yourJson = gson.fromJson(data, JsonObject.class).get("lotList");
+        Type listType = new TypeToken<List<Lot>>() {
+        }.getType();
+        List<Lot> lotList = new Gson().fromJson(yourJson, listType);
+        long id = 0L;
+        for (Lot l : lotList) {
+            Productinfo p = productService.getProductInfo(l.getProductType());
+            l.setId(id++);
+            l.setProductinfo(p);
+        }
+
+        String[] dateArray = series.split("-");
+        String[] startDay = dateArray[0].trim().split("/");
+        String[] endDay = dateArray[1].trim().split("/");
+
+        Calendar c = Calendar.getInstance();
+        c.set(Integer.parseInt(startDay[2]), Integer.parseInt(startDay[0]) - 1, Integer.parseInt(startDay[1]));
+        int start = c.get(Calendar.DAY_OF_YEAR);
+        c.set(Integer.parseInt(endDay[2]), Integer.parseInt(endDay[0]) - 1, Integer.parseInt(endDay[1]));
+        int end = c.get(Calendar.DAY_OF_YEAR);
+
+        String returnStartDate = startDay[2] + "-" + startDay[0] + "-" + startDay[1] + " 00:00";
+        String returnEndDate = endDay[2] + "-" + endDay[0] + "-" + endDay[1] + " 23:59";
+
+        ListGenerator listGenerator = new ListGenerator();
+
+        int gap = end - start;
+        List<Day> dayList = new ArrayList<>();
+        List<TimeGrain> timeGrainList = new ArrayList<>();
+        listGenerator.generateTimeList(dayList, timeGrainList, start, gap);
+
+        List<Productinfo> productinfoList = productService.getAllProduct();
+        List<Oven> ovenList = ovenService.getAllOven();
+
+        Long ovenId = 0L;
+        for (Oven o : ovenList) {
+            o.setId(ovenId++);
+        }
+
+        List<LotAssignment> lotAssignment = new ArrayList<>();
+        Long LPId = 0L;
+        List<LotPackage> lotPackagesList = new ArrayList<>();
+
+        listGenerator.generatePackageList(lotList, lotPackagesList, lotAssignment);
+
+
+        LotSchedule unassignment = new LotSchedule();
+        unassignment.setDayList(dayList);
+        unassignment.setTimeGrainList(timeGrainList);
+        unassignment.setOvenList(ovenList);
+        unassignment.setLotList(lotPackagesList);
+        unassignment.setLotAssignmentList(lotAssignment);
+        unassignment.setId(0L);
+        LotConstrainConfiguration constraintConfiguration = new LotConstrainConfiguration();
+        constraintConfiguration.setId(0L);
+        unassignment.setConstraintConfiguration(constraintConfiguration);
+
+        SolverFactory<LotSchedule> solverFactory = SolverFactory.createFromXmlResource(SOLVER_CONFIG);
+        Solver<LotSchedule> solver = solverFactory.buildSolver();
+
+        LotSchedule assigned = solver.solve(unassignment);//启动引擎
+
+        int hardScore = assigned.getScore().getHardScore();
+        int softScore = assigned.getScore().getSoftScore();
+        int initScore = assigned.getScore().getInitScore();
+
+        HashMap<Oven, List<LotAssignment>> result = new HashMap<>();
+
+        assigned.getLotAssignmentList().stream().forEach(l -> {
+            if (result.containsKey(l.getOven())) {
+                List<LotAssignment> lp = result.get(l.getOven());
+                lp.add(l);
+                result.put(l.getOven(), lp);
+            } else {
+                List<LotAssignment> lp = new ArrayList<>();
+                lp.add(l);
+                result.put(l.getOven(), lp);
+            }
+        });
+
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("Status", 200);
+        map.put("resultData", result);
+        map.put("HardScore", hardScore);
+        map.put("SoftScore", softScore);
+        map.put("StartDate", returnStartDate);
+        map.put("EndDate", returnEndDate);
+        return map;
+    }
+
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public @ResponseBody

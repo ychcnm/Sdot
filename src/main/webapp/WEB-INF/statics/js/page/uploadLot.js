@@ -3,7 +3,6 @@
  *          request.js
  * */
 let uploadLotPage;
-
 uploadLotPage = {
     requestURL: this.baseUrl + "/lot/upload",
     baseUrl: util.getContextPath(),
@@ -78,6 +77,15 @@ uploadLotPage = {
         let body = "<div id=\"chartdiv\"></div>";
         $('#uploadBody').html(body);
         // Themes begin
+
+        let HardScore = data['HardScore'];
+        let SoftScore = data['SoftScore'];
+
+        let head = " <h3><i class=\"fa fa-history\"></i>Result</h3>" + "HardScore: " + HardScore + " / " + "SoftScore: " + SoftScore;
+
+        $('#upLotHead').html(head);
+
+
         am4core.useTheme(am4themes_animated);
         // Themes end
 
@@ -151,9 +159,9 @@ uploadLotPage = {
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         dateAxis.renderer.minGridDistance = 70;
         dateAxis.baseInterval = {count: 2, timeUnit: "hour"};
-        dateAxis.min = new Date(startArray).getTime();
-        dateAxis.max = new Date(endArray).getTime();
-        dateAxis.strictMinMax = true;
+        // dateAxis.min = new Date(startArray).getTime();
+        //  dateAxis.max = new Date(endArray).getTime();
+        //  dateAxis.strictMinMax = true;
         dateAxis.renderer.tooltipLocation = 0;
 
         var series1 = chart.series.push(new am4charts.ColumnSeries());
@@ -165,7 +173,7 @@ uploadLotPage = {
         series1.dataFields.categoryY = "category";
         series1.columns.template.propertyFields.fill = "color"; // get color from data
         series1.columns.template.propertyFields.stroke = "color";
-        series1.columns.template.strokeOpacity = 1;
+        series1.columns.template.strokeOpacity = 0;
 
         chart.scrollbarX = new am4core.Scrollbar();
 

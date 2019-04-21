@@ -112,7 +112,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="card mb-3">
-                            <div class="card-header">
+                            <div class="card-header" id="upLotHead">
                                 <h3><i class="fa fa-file"></i>Upload Lot For Planner</h3>
                                 Files upload with drag & drop
                             </div>
