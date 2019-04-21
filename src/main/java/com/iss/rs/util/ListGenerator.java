@@ -12,13 +12,13 @@ import java.util.List;
 
 public class ListGenerator {
 
-    public void generateTimeList(List<Day> dayList, List<TimeGrain> timeGrainList, int gap) {
+    public void generateTimeList(List<Day> dayList, List<TimeGrain> timeGrainList, int start, int gap) {
         int k = 0;
         long dayId = 0L, timeGrainId = 0L;
-        while (k < gap) {
+        while (k <= gap) {
             Day day = new Day();
             day.setId(dayId++);
-            day.setDayOfYear(105 + k);
+            day.setDayOfYear(start + k);
             dayList.add(day);
 
             for (int j = 0; j < 24; j++) {

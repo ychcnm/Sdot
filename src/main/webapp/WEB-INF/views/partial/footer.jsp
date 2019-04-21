@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <footer class="footer">
 		<span class="text-right">
-		Copyright <a target="_blank" href="#">Your Website</a>
+		Copyright <a target="_blank" href="#">Hex</a>
 		</span>
     <span class="float-right">
 		Powered by <a target="_blank" href="https://www.pikeadmin.com"><b>Pike Admin</b></a>

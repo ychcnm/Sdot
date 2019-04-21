@@ -80,4 +80,5 @@ public class LotConstrainConfiguration extends AbstractPersistable {
     public void setDoAllMeetingsAsSoonAsPossible(HardSoftScore doAllMeetingsAsSoonAsPossible) {
         this.doAllMeetingsAsSoonAsPossible = doAllMeetingsAsSoonAsPossible;
     }
+
 }

@@ -53,7 +53,13 @@
     <link href='<spring:url value="/statics/assets/plugins/datetimepicker/css/daterangepicker.css"/>' rel="stylesheet">
     rel="stylesheet"/>
     <!-- END CSS for this page -->
-
+    <style>
+        #chartdiv {
+            width: 100%;
+            max-height: 600px;
+            height: 400vh;
+        }
+    </style>
 </head>
 
 <body class="adminbody">
@@ -85,7 +91,7 @@
         <!-- Start content -->
         <div class="content">
 
-            <div class="container-fluid">
+            <div class="container-fluid" id="lotrow">
 
 
                 <div class="row">
@@ -110,7 +116,7 @@
                                 <h3><i class="fa fa-file"></i>Upload Lot For Planner</h3>
                                 Files upload with drag & drop
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" id="uploadBody">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <input type="file" name="files[]" id="uploadLot" multiple="multiple">
@@ -128,7 +134,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><!-- end card-->
+                        </div>
+                        <!-- end card-->
                     </div>
                 </div>
 
@@ -156,6 +163,9 @@
 <script src='<spring:url value="/statics/js/page/uploadLot.js"/>'></script>
 
 <!-- BEGIN Java Script for this page -->
+<script src='<spring:url value="/statics/assets/js/core.js"/>'></script>
+<script src='<spring:url value="/statics/assets/js/charts.js"/>'></script>
+<script src='<spring:url value="/statics/assets/js/animated.js"/>'></script>
 <script src='<spring:url value="/statics/assets/plugins/jquery.filer/js/jquery.filer.min.js"/>'></script>
 <script>
     uploadLotPage.init();

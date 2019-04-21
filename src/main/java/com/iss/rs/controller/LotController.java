@@ -181,12 +181,13 @@ public class LotController {
         String[] endDay = dateArray[1].trim().split("/");
 
         Calendar c = Calendar.getInstance();
-
-        c.set(Integer.parseInt(startDay[2]), Integer.parseInt(startDay[0]), Integer.parseInt(startDay[1]));
+        c.set(Integer.parseInt(startDay[2]), Integer.parseInt(startDay[0]) - 1, Integer.parseInt(startDay[1]));
         int start = c.get(Calendar.DAY_OF_YEAR);
-        c.set(Integer.parseInt(endDay[2]), Integer.parseInt(endDay[0]), Integer.parseInt(endDay[1]));
+        c.set(Integer.parseInt(endDay[2]), Integer.parseInt(endDay[0]) - 1, Integer.parseInt(endDay[1]));
         int end = c.get(Calendar.DAY_OF_YEAR);
 
+        String returnStartDate = startDay[2] + "-" + startDay[0] + "-" + startDay[1] + " 00:00";
+        String returnEndDate = endDay[2] + "-" + endDay[0] + "-" + endDay[1] + " 23:59";
 
         List<Lot> lotList = new ArrayList<>();
 
@@ -227,7 +228,7 @@ public class LotController {
         int gap = end - start;
         List<Day> dayList = new ArrayList<>();
         List<TimeGrain> timeGrainList = new ArrayList<>();
-        listGenerator.generateTimeList(dayList, timeGrainList, gap);
+        listGenerator.generateTimeList(dayList, timeGrainList, start, gap);
 
         List<Productinfo> productinfoList = productService.getAllProduct();
         List<Oven> ovenList = ovenService.getAllOven();
@@ -261,7 +262,10 @@ public class LotController {
 
         LotSchedule assigned = solver.solve(unassignment);//启动引擎
 
-        System.out.println(assigned);
+        int hardScore = assigned.getScore().getHardScore();
+        int softScore = assigned.getScore().getSoftScore();
+        int initScore = assigned.getScore().getInitScore();
+
         HashMap<Oven, List<LotAssignment>> result = new HashMap<>();
 
         assigned.getLotAssignmentList().stream().forEach(l -> {
@@ -276,7 +280,11 @@ public class LotController {
             }
         });
         map.put("Status", 200);
-        map.put("Process Successful", result);
+        map.put("resultData", result);
+        map.put("HardScore", hardScore);
+        map.put("SoftScore", softScore);
+        map.put("StartDate", returnStartDate);
+        map.put("EndDate", returnEndDate);
         return map;
     }
 }
