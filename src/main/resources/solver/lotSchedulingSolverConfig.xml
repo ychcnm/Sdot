@@ -12,6 +12,6 @@
     </scoreDirectorFactory>
 
     <termination>
-        <minutesSpentLimit>1</minutesSpentLimit>
+        <minutesSpentLimit>2</minutesSpentLimit>
     </termination>
 </solver>

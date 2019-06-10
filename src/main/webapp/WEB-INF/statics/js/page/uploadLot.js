@@ -112,7 +112,11 @@ uploadLotPage = {
                 let requireTime = dataObject[o][j]['lotPackage']['requireTime'];
                 let year = dataObject[o][j]['startingTimeGrain']['date']['year'];
                 let dayOfYear = dataObject[o][j]['startingTimeGrain']['day']['dayOfYear'];
+                let timeString = dataObject[o][j]['startingTimeGrain']['timeString'];
                 let start = uploadLotPage.dateFromDay(year, dayOfYear);
+                if ("12:00" == timeString) {
+                    start = new Date(new Date(start).getTime() + 60 * 60 * 12 * 1000);
+                }
                 let end = new Date(new Date(start).getTime() + 60 * 60 * requireTime * 1000);
                 start = uploadLotPage.dateFormat(start);
                 end = uploadLotPage.dateFormat(end);
@@ -154,10 +158,11 @@ uploadLotPage = {
         var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "category";
         categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.fontSize = 10;
         categoryAxis.renderer.inversed = true;
 
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-        dateAxis.renderer.minGridDistance = 70;
+        dateAxis.renderer.minGridDistance = 100;
         dateAxis.baseInterval = {count: 2, timeUnit: "hour"};
         // dateAxis.min = new Date(startArray).getTime();
         //  dateAxis.max = new Date(endArray).getTime();
@@ -173,7 +178,7 @@ uploadLotPage = {
         series1.dataFields.categoryY = "category";
         series1.columns.template.propertyFields.fill = "color"; // get color from data
         series1.columns.template.propertyFields.stroke = "color";
-        series1.columns.template.strokeOpacity = 0;
+        series1.columns.template.strokeOpacity = 1;
 
         chart.scrollbarX = new am4core.Scrollbar();
 

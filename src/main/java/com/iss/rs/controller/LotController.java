@@ -283,6 +283,7 @@ public class LotController {
 
         Calendar c = Calendar.getInstance();
         c.set(Integer.parseInt(startDay[2]), Integer.parseInt(startDay[0]) - 1, Integer.parseInt(startDay[1]));
+
         int start = c.get(Calendar.DAY_OF_YEAR);
         c.set(Integer.parseInt(endDay[2]), Integer.parseInt(endDay[0]) - 1, Integer.parseInt(endDay[1]));
         int end = c.get(Calendar.DAY_OF_YEAR);
